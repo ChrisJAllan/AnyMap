@@ -7,18 +7,19 @@
 #include <map>
 #include <unordered_map>
 
-namespace engine2
-{
-
 /**
- * A map that automaticaly selects hash, tree, or vector storage based on key
- * type.
+ * @class AutoMap
+ * @brief A map that automaticaly selects hash, tree, or vector storage based on
+ * key type.
+ * 
+ * `AutoMap` typedefs to `std::unordered_map`, `std::map`, `VectorMap`, or
+ * `void` depending on the key type.
  */
 
-inline namespace automap_impl {
+namespace automap_impl {
 
 using namespace std;
-using namespace engine2::constraints;
+using namespace constraints;
 
 template<class key_t, class value_t>
 auto map_t() -> typename enable_if<
@@ -44,11 +45,9 @@ auto map_t() -> typename enable_if<
 	void
 >::type;
 
-}
+} // namespace automap_impl
 
 template<class key_t, class value_t>
-using AutoMap = decltype(map_t<key_t, value_t>());
-
-}
+using AutoMap = decltype(automap_impl::map_t<key_t, value_t>());
 
 #endif // AUTOMAP_H

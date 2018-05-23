@@ -1,13 +1,11 @@
 #ifndef VECTORMAP_CPP
 #define VECTORMAP_CPP
 
+#include <stdexcept>
 #include <vector>
 
-namespace engine2
-{
-
 /**
- * @class VectorMap VectorMap.hpp "Engine/VectorMap.hpp"
+ * @class VectorMap VectorMap.hpp
  * @brief A map with vector storage.
  * 
  * @todo Move all function implementations out of class declaration.
@@ -17,7 +15,7 @@ template<class k, class v>
 class VectorMap
 {
 public:
-	using map_type       = vector<pair<k, v>>;
+	using map_type       = std::vector<std::pair<k, v>>;
 	using key_type       = k;
 	using mapped_type    = v;
 	using iterator       = typename map_type::iterator;
@@ -44,9 +42,9 @@ public:
 	{ storage.clear(); }
 	
 	template<class... Args>
-	pair<iterator, bool> emplace(Args&&... args)
+	std::pair<iterator, bool> emplace(Args&&... args)
 	{
-		storage.emplace_back(forward<Args>(args)...);
+		storage.emplace_back(std::forward<Args>(args)...);
 		return make_pair(--storage.end(), true);
 	}
 	
@@ -75,7 +73,7 @@ public:
 			}
 		}
 		
-		throw out_of_range("Key not found.");
+		throw std::out_of_range("Key not found.");
 	}
 
 	const mapped_type& at(const key_type &key) const
@@ -157,7 +155,5 @@ VECTORMAP_DEC::size() const noexcept -> size_type
 
 VECTORMAP_DEC::max_size() const noexcept -> size_type
 { return storage.max_size(); }
-
-}
 
 #endif // VECTORMAP_CPP
